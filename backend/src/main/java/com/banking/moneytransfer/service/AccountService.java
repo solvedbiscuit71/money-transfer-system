@@ -140,13 +140,13 @@ public class AccountService {
     }
 
     @Transactional
-    public void createDummyAccounts() {
-        // clear existing data
+    public void overwriteMockData() {
+        // delete existing data from the database
         transactionLogRepository.deleteAll();
         accountRepository.deleteAll();
         log.info("Delete all entities from accounts and transaction_logs table");
 
-        // dummy accounts
+        // mock data
         List<Account> accounts = List.of(
                 mapToAccount("1000-1000-1001", "John Doe",   10000.00,  AccountStatus.ACTIVE),
                 mapToAccount("1000-1000-1002", "Jane Smith",   5000.00,  AccountStatus.ACTIVE),
@@ -160,6 +160,6 @@ public class AccountService {
 
         // save to repository
         accountRepository.saveAll(accounts);
-        log.info("Inserted dummy accounts");
+        log.info("Inserted mock data");
     }
 }

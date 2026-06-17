@@ -4,16 +4,13 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost:3306/money_transfer_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: root
-    password: Root123$
+    # **Mandatory**
+    # set SPRING_DATASOURCE_USERNAME=<username>
+    # set SPRING_DATASOURCE_PASSWORD=<password>
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-  sql:
-    init:
-      mode: always # This forces data.sql to run on startup
-
   jpa:
-    defer-datasource-initialization: true # Ensures Hibernate creates tables BEFORE data.sql runs
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: update
     show-sql: true
@@ -21,16 +18,12 @@ spring:
       hibernate:
         format_sql: true
 
-  security:
-    user:
-      name: user
-      password: password
-
 server:
   port: 8080
   servlet:
     context-path: /
 
+# Configure log levels
 logging:
   level:
     com.banking.moneytransfer: DEBUG
@@ -39,8 +32,11 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
 
+# Enable CORS for angular frontend (development only)
 cors:
   allow-origin: "http://localhost:4200"
 
-dummy:
-  enable: true
+# **Optional**
+# set MOCK_OVERWRITE=true to overwrite the database with mock data
+mock:
+  overwrite: false

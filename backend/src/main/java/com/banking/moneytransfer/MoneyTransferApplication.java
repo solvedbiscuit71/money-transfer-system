@@ -18,8 +18,8 @@ public class MoneyTransferApplication {
     public static void main(String[] args) { SpringApplication.run(MoneyTransferApplication.class, args); }
 
     @Bean
-    @ConditionalOnProperty(name = "dummy.enable", havingValue = "true")
+    @ConditionalOnProperty(name = "mock.overwrite", havingValue = "true")
     CommandLineRunner seedRunner(AccountService accountService) {
-        return args -> accountService.createDummyAccounts();
+        return args -> accountService.overwriteMockData();
     }
 }
