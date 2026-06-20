@@ -1,6 +1,5 @@
 package com.banking.moneytransfer.controller;
 
-import com.banking.moneytransfer.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,8 +14,6 @@ import java.security.Principal;
 @Slf4j
 
 public class AuthController {
-
-    private final AccountService accountService;
 
     @GetMapping("/login")
     @ResponseStatus(HttpStatus.NO_CONTENT)
