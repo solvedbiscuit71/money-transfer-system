@@ -106,8 +106,7 @@ export class TransferComponent implements OnInit {
         this.failedTransaction.set(null);
 
         // reset form
-        this.transferForm.controls['toAccountId'].setValue('');
-        this.transferForm.controls['amount'].setValue(null);
+        this.transferForm.reset()
         this.submitted.set(false);
     }
 }
