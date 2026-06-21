@@ -112,20 +112,16 @@ export class LoginComponent {
             const { firstName, lastName, password } = this.signupForm.value;
             const holderName = firstName + ' ' + lastName;
 
-            // this.authService.login(username, password).subscribe({
-            //     next: (response) => {
-            //         if (response.ok) {
-            //             this.router.navigate(['/transactions']);
-            //         } else {
-            //             this.errorMessage.set("Invalid credentials")
-            //         }
-            //         this.isLoading.set(false)
-            //     },
-            //     error: (err) => {
-            //         this.errorMessage.set("Invalid credentials")
-            //         this.isLoading.set(false)
-            //     }
-            // });
+            this.authService.signup(holderName, password).subscribe({
+                next: () => {
+                    this.isLoading.set(false)
+                    this.router.navigate(['/transactions']);
+                },
+                error: () => {
+                    this.errorMessage.set("Failed, Try again")
+                    this.isLoading.set(false)
+                }
+            });
         }
     }
 }
