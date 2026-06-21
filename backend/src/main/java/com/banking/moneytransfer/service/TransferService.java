@@ -175,6 +175,7 @@ public class TransferService {
                 .debitedFrom(request.getFromAccountId())
                 .creditedTo(request.getToAccountId())
                 .amount(request.getAmount())
+                .rewardPoints(reward)
                 .build();
     }
 }

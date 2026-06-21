@@ -5,4 +5,5 @@ export interface TransferResponse {
     debitedFrom: string;
     creditedTo: string;
     amount: number;
+    rewardPoints: number;
 }

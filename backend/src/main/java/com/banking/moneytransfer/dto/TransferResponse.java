@@ -22,4 +22,5 @@ public class TransferResponse {
     private String debitedFrom;
     private String creditedTo;
     private BigDecimal amount;
+    private Integer rewardPoints;
 }
