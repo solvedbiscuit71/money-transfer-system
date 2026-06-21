@@ -35,6 +35,9 @@ public class TransactionLog {
     @Column(nullable = false, precision = 18, scale = 2)
     private BigDecimal amount;
 
+    @Column(name = "reward_points")
+    private int rewardPoints;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TransactionStatus status;

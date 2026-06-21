@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -83,6 +86,28 @@ public class TransferService {
         }
     }
 
+    private record RewardMapping(int amount, int rewards) {};
+
+    /**
+     * Compute the rewards point for the transfer
+     */
+    private int computeRewards(BigDecimal amount) {
+        List<RewardMapping> mapping = new ArrayList<>();
+        mapping.add(new RewardMapping(100000, 3000));   // Rs. 1,00,000 = 3000 RP
+        mapping.add(new RewardMapping(10000, 200));     // Rs. 10,000   = 200 RP
+        mapping.add(new RewardMapping(1000, 15));       // Rs. 1,000    = 15 RP
+        mapping.add(new RewardMapping(100, 1));         // Rs. 100      = 1 RP
+
+        int rewards = 0;
+        for (RewardMapping rewardMapping : mapping) {
+            var divmod = amount.divideAndRemainder(BigDecimal.valueOf(rewardMapping.amount));
+            rewards += divmod[0].intValue() * rewardMapping.rewards;
+            amount = divmod[1];
+        }
+
+        return rewards;
+    }
+
     /**
      * Execute the actual transfer
      */
@@ -94,10 +119,16 @@ public class TransferService {
         Account toAccount = accountRepository.findById(request.getToAccountId())
                 .orElseThrow(() -> new AccountNotFoundException(request.getToAccountId()));
 
+        int reward = 0;
+
         try {
             // Debit before credit
             fromAccount.debit(request.getAmount());
             toAccount.credit(request.getAmount());
+
+            // Add rewardPoints
+            reward = computeRewards(request.getAmount());
+            fromAccount.addRewardPoints(reward);
 
         } catch (AccountNotActiveException | InsufficientBalanceException e) {
             // Log Failure (in a new transaction log)
@@ -126,6 +157,7 @@ public class TransferService {
                 .fromAccount(fromAccount)
                 .toAccount(toAccount)
                 .amount(request.getAmount())
+                .rewardPoints(reward)
                 .status(TransactionStatus.SUCCESS)
                 .idempotencyKey(request.getIdempotencyKey())
                 .build();

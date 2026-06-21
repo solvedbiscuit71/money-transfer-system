@@ -36,7 +36,7 @@ public class Account {
     @Column(nullable = false, precision = 18, scale = 2)
     private BigDecimal balance;
 
-    @Column(nullable = false)
+    @Column(name = "reward_points", nullable = false)
     private Integer rewardPoints;
 
     @Enumerated(EnumType.STRING)
@@ -98,5 +98,14 @@ public class Account {
      */
     public boolean isActive() {
         return AccountStatus.ACTIVE.equals(this.status);
+    }
+
+    /**
+     * Add reward points
+     */
+    public void addRewardPoints(int rewardPoints) {
+        if (rewardPoints > 0) {
+            this.rewardPoints += rewardPoints;
+        }
     }
 }

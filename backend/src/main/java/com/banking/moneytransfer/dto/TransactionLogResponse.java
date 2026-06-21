@@ -20,6 +20,7 @@ public class TransactionLogResponse {
     private String accountId;
     private String holderName;
     private BigDecimal amount;
+    private Integer rewardPoints;
     private TransactionStatus status;
     private String failureReason;
     private LocalDateTime createdOn;

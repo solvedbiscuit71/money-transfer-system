@@ -37,6 +37,6 @@ cors:
   allow-origin: "http://localhost:4200"
 
 # **Optional**
-# set MOCK_OVERWRITE=false to overwrite the database with mock data
+# set MOCK_OVERWRITE=true to overwrite the database with mock data
 mock:
-  overwrite: true
+  overwrite: false

@@ -127,6 +127,7 @@ public class AccountService {
                                         .status(t.getStatus())
                                         .failureReason(t.getFailureReason())
                                         .amount(t.getAmount())
+                                        .rewardPoints(t.getRewardPoints())
                                         .createdOn(t.getCreatedOn())
                                         .build()),
                         account.getReceivedTransactions()
@@ -139,6 +140,7 @@ public class AccountService {
                                         .status(t.getStatus())
                                         .failureReason(t.getFailureReason())
                                         .amount(t.getAmount())
+                                        .rewardPoints(t.getRewardPoints())
                                         .createdOn(t.getCreatedOn())
                                         .build())
                 )
@@ -164,7 +166,7 @@ public class AccountService {
         return Account.builder()
                 .id(id)
                 .holderName(name)
-                .passwordHash(passwordEncoder.encode("pwd@" + id.substring(id.length() - 4)))
+                .passwordHash(passwordEncoder.encode("Pwd@" + id.substring(id.length() - 4)))
                 .status(status)
                 .balance(BigDecimal.valueOf(balance))
                 .rewardPoints(rewardPoints)
@@ -181,13 +183,13 @@ public class AccountService {
         // mock data
         List<Account> accounts = List.of(
                 mapToAccount("1000-1000-1001", "John Doe",   10000.00, 100,  AccountStatus.ACTIVE),
-                mapToAccount("1000-1000-1002", "Jane Smith",   5000.00,  500, AccountStatus.ACTIVE),
-                mapToAccount("1000-1000-1003", "Bob Johnson",  15000.00, 1000, AccountStatus.ACTIVE),
-                mapToAccount("1000-1000-1004", "Alice Williams", 8000.00, 200, AccountStatus.ACTIVE),
-                mapToAccount("1000-1000-1005", "Charlie Brown", 12000.00, 1200, AccountStatus.LOCKED),
-                mapToAccount("1000-1000-1006", "Diana Prince", 20000.00, 2000, AccountStatus.ACTIVE),
-                mapToAccount("1000-1000-1007", "Eve Davis",    3000.00,  350, AccountStatus.CLOSED),
-                mapToAccount("1000-1000-1008", "Frank Miller", 7500.00,  750, AccountStatus.ACTIVE)
+                mapToAccount("1000-1000-1002", "Jane Smith",   5000.00,  50, AccountStatus.ACTIVE),
+                mapToAccount("1000-1000-1003", "Bob Johnson",  15000.00, 150, AccountStatus.ACTIVE),
+                mapToAccount("1000-1000-1004", "Alice Williams", 80000.00, 220, AccountStatus.ACTIVE),
+                mapToAccount("1000-1000-1005", "Charlie Brown", 12000.00, 120, AccountStatus.LOCKED),
+                mapToAccount("1000-1000-1006", "Diana Prince", 20000.00, 200, AccountStatus.ACTIVE),
+                mapToAccount("1000-1000-1007", "Eve Davis",    3500.00,  30, AccountStatus.CLOSED),
+                mapToAccount("1000-1000-1008", "Frank Miller", 7500.00,  75, AccountStatus.ACTIVE)
         );
 
         // save to repository
