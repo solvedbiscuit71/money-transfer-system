@@ -50,3 +50,15 @@
         display: none;
     }
 }
+
+.reward-points {
+    margin-left: 0.5em;
+
+    color: #0ea5e9;
+    font-size: 0.675rem;
+    font-weight: 500;
+    font-family: inherit;
+    padding: 0.5em 1em;
+    border-radius: 4px;
+    border: 1px solid #0ea5e9;
+}

@@ -13,11 +13,16 @@ export class Navbar {
   constructor(private authService: AuthService, private accountService: AccountService, private router: Router) {}
 
   username = signal<string>('User');
+  rewardPoints = signal<number>(0);
+
 
   ngOnInit() {
     if (this.authService.loggedIn) {
     this.accountService.fetchAccount(this.authService.accountId!).subscribe({
-      next: (account) => this.username.set(account.holderName),
+      next: (account) => {
+        this.username.set(account.holderName);
+        this.rewardPoints.set(account.rewardPoints);
+      },
       error: () => this.router.navigate(['/login'])
     });
     }
