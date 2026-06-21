@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -14,8 +14,10 @@ import { AccountMaskDirective } from 'app/directives/account-mask.directive';
 })
 export class LoginComponent {
     loginForm!: FormGroup;
+    signupForm!: FormGroup;
     submitted = signal(false);
     isLoading = signal(false);
+    showLoginForm = signal(false);
     errorMessage = signal("");
 
     constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) { }
@@ -25,9 +27,57 @@ export class LoginComponent {
             username: ['', [Validators.required, Validators.minLength(14), Validators.maxLength(14)]],
             password: ['', [Validators.required, Validators.minLength(8)]]
         });
+
+        this.signupForm = this.fb.group({
+            firstName: ['', [Validators.required]],
+            lastName: ['', [Validators.required]],
+            password: ['', [Validators.required, Validators.minLength(8), this.validatePassword]],
+            confirmPassword: ['', [Validators.required]]
+        }, 
+        { validators: this.validateConfirmPassword });
     }
 
-    onSubmit() {
+    validatePassword(control: AbstractControl): ValidationErrors | null {
+        const value: string = control.value || '';
+
+        const hasUpperCase = /[A-Z]/.test(value);
+        const hasDigit = /\d/.test(value);
+        const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value);
+
+        if (!hasUpperCase || !hasDigit || !hasSpecialChar) {
+            return { invalidPassword: true };
+        }
+        return null;
+    };
+
+    validateConfirmPassword(group: AbstractControl): ValidationErrors | null {
+        const password = group.get('password');
+        const confirmPassword = group.get('confirmPassword');
+
+        if (!password || !confirmPassword) {
+            return null;
+        }
+
+        // Don't override an existing error on confirmPassword that came from elsewhere
+        if (confirmPassword.errors && !confirmPassword.errors['passwordMismatch']) {
+            return null;
+        }
+
+        if (password.value !== confirmPassword.value) {
+            confirmPassword.setErrors({ passwordMismatch: true });
+            return { passwordMismatch: true };
+        }
+
+        confirmPassword.setErrors(null);
+        return null;
+    };
+
+    onChangeForm(showLogin: boolean) {
+        this.submitted.set(false)
+        this.showLoginForm.set(showLogin)
+    }
+
+    onLogin() {
         // set to true
         this.submitted.set(true)
 
@@ -49,6 +99,33 @@ export class LoginComponent {
                     this.isLoading.set(false)
                 }
             });
+        }
+    }
+
+    onSignUp() {
+        // set to true
+        this.submitted.set(true)
+
+        if (this.signupForm.valid) {
+            this.isLoading.set(true)
+            this.errorMessage.set("")
+            const { firstName, lastName, password } = this.signupForm.value;
+            const holderName = firstName + ' ' + lastName;
+
+            // this.authService.login(username, password).subscribe({
+            //     next: (response) => {
+            //         if (response.ok) {
+            //             this.router.navigate(['/transactions']);
+            //         } else {
+            //             this.errorMessage.set("Invalid credentials")
+            //         }
+            //         this.isLoading.set(false)
+            //     },
+            //     error: (err) => {
+            //         this.errorMessage.set("Invalid credentials")
+            //         this.isLoading.set(false)
+            //     }
+            // });
         }
     }
 }

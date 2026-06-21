@@ -276,7 +276,6 @@
 }
 
 .login-footer {
-  margin-top: 2rem;
   text-align: center;
   font-size: 0.875rem;
   color: #64748b;
@@ -289,6 +288,7 @@
 }
 
 .login-footer a:hover {
+  cursor: pointer;
   text-decoration: underline;
 }
 
