@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AccountMaskDirective } from 'app/directives/account-mask.directive';
+import { validConfirmPassword, validPassword } from 'app/validators/password.validator';
 
 @Component({
     selector: 'app-login',
@@ -31,46 +32,11 @@ export class LoginComponent {
         this.signupForm = this.fb.group({
             firstName: ['', [Validators.required]],
             lastName: ['', [Validators.required]],
-            password: ['', [Validators.required, Validators.minLength(8), this.validatePassword]],
+            password: ['', [Validators.required, Validators.minLength(8), validPassword()]],
             confirmPassword: ['', [Validators.required]]
         }, 
-        { validators: this.validateConfirmPassword });
+        { validators: validConfirmPassword() });
     }
-
-    validatePassword(control: AbstractControl): ValidationErrors | null {
-        const value: string = control.value || '';
-
-        const hasUpperCase = /[A-Z]/.test(value);
-        const hasDigit = /\d/.test(value);
-        const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value);
-
-        if (!hasUpperCase || !hasDigit || !hasSpecialChar) {
-            return { invalidPassword: true };
-        }
-        return null;
-    };
-
-    validateConfirmPassword(group: AbstractControl): ValidationErrors | null {
-        const password = group.get('password');
-        const confirmPassword = group.get('confirmPassword');
-
-        if (!password || !confirmPassword) {
-            return null;
-        }
-
-        // Don't override an existing error on confirmPassword that came from elsewhere
-        if (confirmPassword.errors && !confirmPassword.errors['passwordMismatch']) {
-            return null;
-        }
-
-        if (password.value !== confirmPassword.value) {
-            confirmPassword.setErrors({ passwordMismatch: true });
-            return { passwordMismatch: true };
-        }
-
-        confirmPassword.setErrors(null);
-        return null;
-    };
 
     onChangeForm(showLogin: boolean) {
         this.submitted.set(false)
