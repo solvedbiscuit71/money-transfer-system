@@ -41,6 +41,10 @@ export class TransferComponent implements OnInit {
         this.showBalance.update(v => !v);
     }
 
+    fromAccountNo() {
+        return this.authService.accountId!;
+    }
+
     ngOnInit(): void {
         this.transferForm = this.fb.group({ 
             toAccountId: ['', [Validators.required, Validators.minLength(14), Validators.maxLength(14), notEqual(this.authService.accountId!)]],

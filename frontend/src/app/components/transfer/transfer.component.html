@@ -86,8 +86,17 @@
 
                     <form [formGroup]="transferForm" (ngSubmit)="onSubmit()">
                         <div class="mb-3">
+                            <label for="fromAccountId"
+                                class="form-label text-dark fw-bold small text-uppercase mb-1">Sender Account No.</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+                                <input type="text" id="fromAccountId" class="form-control" disabled [value]="fromAccountNo()">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
                             <label for="toAccountId"
-                                class="form-label text-dark fw-bold small text-uppercase mb-1">Recipient Account No.</label>
+                                class="form-label text-dark fw-bold small text-uppercase mb-1">Receiver Account No.</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
                                 <input type="text" id="toAccountId" formControlName="toAccountId" accountMask
@@ -96,7 +105,7 @@
                             <div class="error-message small text-danger">
                                 @if (submitted() || transferForm.controls['toAccountId']?.touched) {
                                     @if (transferForm.controls['toAccountId']?.errors?.['required']) {
-                                        Account no. is required
+                                        Receiver account no. is required
                                     } @else if (transferForm.controls['toAccountId']?.errors?.['minlength'] || transferForm.controls['toAccountId']?.errors?.['maxLength']) {
                                         Account no. must be 12 digits
                                     } @else if (transferForm.controls['toAccountId']?.errors?.['notEqual']) {
