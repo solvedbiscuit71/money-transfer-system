@@ -40,3 +40,8 @@ cors:
 # set MOCK_OVERWRITE=true to overwrite the database with mock data
 mock:
   overwrite: false
+
+# set SEQ_ACCOUNTID_NEXT=<four-digit> to overwrite the next accountid
+seq:
+  accountid:
+    next: 1010

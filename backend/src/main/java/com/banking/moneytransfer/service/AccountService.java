@@ -12,6 +12,7 @@ import com.banking.moneytransfer.repository.AccountRepository;
 import com.banking.moneytransfer.repository.TransactionLogRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,12 +38,10 @@ public class AccountService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    /**
-     * Hot Fix: Currently using an in-memory sequence
-     */
-    private static int accountIdSequence = 1009;
+    @Value("${seq.accountid.next}")
+    private int accountIdSequence;
 
-    private static String nextId() {
+    private String nextId() {
         StringBuilder sb = new StringBuilder();
         sb.append("1000-1000-");
         sb.append(accountIdSequence);
@@ -184,12 +183,13 @@ public class AccountService {
         List<Account> accounts = List.of(
                 mapToAccount("1000-1000-1001", "John Doe",   10000.00, 100,  AccountStatus.ACTIVE),
                 mapToAccount("1000-1000-1002", "Jane Smith",   5000.00,  50, AccountStatus.ACTIVE),
-                mapToAccount("1000-1000-1003", "Bob Johnson",  15000.00, 150, AccountStatus.ACTIVE),
+                mapToAccount("1000-1000-1003", "Bob Johnson",  15000.00, 150, AccountStatus.CLOSED),
                 mapToAccount("1000-1000-1004", "Alice Williams", 80000.00, 220, AccountStatus.ACTIVE),
                 mapToAccount("1000-1000-1005", "Charlie Brown", 12000.00, 120, AccountStatus.LOCKED),
                 mapToAccount("1000-1000-1006", "Diana Prince", 20000.00, 200, AccountStatus.ACTIVE),
-                mapToAccount("1000-1000-1007", "Eve Davis",    3500.00,  30, AccountStatus.CLOSED),
-                mapToAccount("1000-1000-1008", "Frank Miller", 7500.00,  75, AccountStatus.ACTIVE)
+                mapToAccount("1000-1000-1007", "Eve Davis",    5000.00,  30, AccountStatus.CLOSED),
+                mapToAccount("1000-1000-1008", "Frank Miller", 8000.00,  250, AccountStatus.ACTIVE),
+                mapToAccount("1000-1000-1009", "David Johnson", 7500.00,  75, AccountStatus.ACTIVE)
         );
 
         // save to repository
