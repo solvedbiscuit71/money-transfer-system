@@ -20,6 +20,7 @@ public class AccountResponse {
     private String id;
     private String holderName;
     private BigDecimal balance;
+    private Integer rewardPoints;
     private String status;
     private LocalDateTime lastUpdated;
 }

@@ -36,6 +36,9 @@ public class Account {
     @Column(nullable = false, precision = 18, scale = 2)
     private BigDecimal balance;
 
+    @Column(nullable = false)
+    private Integer rewardPoints;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AccountStatus status;
