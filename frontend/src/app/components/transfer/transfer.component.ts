@@ -53,11 +53,16 @@ export class TransferComponent implements OnInit {
 
         if (!this.authService.loggedIn) return;
 
-        this.fetchSenderDetails();
+        // load the balance from backend
+        this.accountService.fetchBalance(this.authService.accountId!).subscribe({
+            next: (res) => {
+                this.balance.set(res.balance);
+            }
+        });
     }
 
     fetchSenderDetails(): void {
-        this.accountService.fetchBalance(this.authService.accountId!).subscribe({
+        this.accountService.updateAccount(this.authService.accountId!).subscribe({
             next: (res) => {
                 this.balance.set(res.balance);
             }
@@ -86,7 +91,7 @@ export class TransferComponent implements OnInit {
                 this.transferResponse.set(response);
                 this.isLoading.set(false);
 
-                // refresh account details to show updated balance
+                // refresh account details to show updated balance & reward points
                 this.fetchSenderDetails();
             },
             error: (error) => {

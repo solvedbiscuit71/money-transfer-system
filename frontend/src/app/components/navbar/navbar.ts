@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AccountService } from 'app/services/account.service';
 import { AuthService } from 'app/services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -9,23 +10,31 @@ import { AuthService } from 'app/services/auth.service';
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
-export class Navbar {
+export class Navbar implements OnInit, OnDestroy {
   constructor(private authService: AuthService, private accountService: AccountService, private router: Router) {}
 
   username = signal<string>('User');
   rewardPoints = signal<number>(0);
 
+  private sub!: Subscription;
 
   ngOnInit() {
-    if (this.authService.loggedIn) {
-    this.accountService.fetchAccount(this.authService.accountId!).subscribe({
-      next: (account) => {
+    this.sub = this.accountService.account$.subscribe(account => {
+      this.username.set(account.holderName);
+      this.rewardPoints.set(account.rewardPoints);
+    })
+
+    // Load the account details
+    if (this.authService.accountId !== null) {
+      this.accountService.fetchAccount(this.authService.accountId).subscribe(account => {
         this.username.set(account.holderName);
         this.rewardPoints.set(account.rewardPoints);
-      },
-      error: () => this.router.navigate(['/login'])
-    });
+      });
     }
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   get greeting(): string {

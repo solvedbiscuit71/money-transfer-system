@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject, tap } from 'rxjs';
 
 import { Account } from '../models/account.model';
 import { Transaction } from '../models/transaction.model';
@@ -13,7 +13,15 @@ import { environment } from 'environments/environment';
 export class AccountService {
     private readonly API_ENDPOINT = environment.baseUrl + '/accounts';
 
+    private account = new Subject<Account>();
+    readonly account$ = this.account.asObservable();
+
     constructor(private http: HttpClient) { }
+
+    updateAccount(accountId: string): Observable<Account> {
+        return this.http.get<Account>(`${this.API_ENDPOINT}/${accountId}`)
+                        .pipe(tap(a => this.account.next(a)));
+    }
 
     fetchAccount(accountId: string): Observable<Account> {
         return this.http.get<Account>(`${this.API_ENDPOINT}/${accountId}`);
