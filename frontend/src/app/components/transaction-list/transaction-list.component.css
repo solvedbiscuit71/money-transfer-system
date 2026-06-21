@@ -2,24 +2,11 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 0.5rem 15vw;
   overflow: hidden !important;
   background-color: #ffffff;
-  height: calc(100vh - 72px);
-}
-
-.card {
-  border: none !important;
-  border-radius: 16px !important;
-  background: #ffffff;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.card-header {
-  border-bottom: none !important;
-  padding: 1.5rem 0 !important;
+  height: calc(100vh - 96px);
+  width: min(80vw, 1080px);
+  margin: 1em auto;
 }
 
 .card-body {
@@ -177,4 +164,19 @@ h2.h5 {
   .page-container {
     padding: 0.5em 1em;
   }
+}
+
+.reward-points {
+    margin-left: 0.5em;
+
+    color: #198754;
+    font-size: 0.5rem;
+    font-weight: bold;
+    font-family: inherit;
+    padding: 0.5em 0.75em;
+    border-radius: 4px;
+    border: 1px solid #198754;
+
+    position: relative;
+    bottom: 0.25em;
 }

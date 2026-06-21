@@ -1,8 +1,8 @@
 <div class="page-container">
-  <div class="card border-0 shadow-sm rounded-4 animate-up">
-    <div class="card-header bg-white border-0 py-3 px-4">
-      <div class="d-flex justify-content-between align-items-center mb-2">
-        <h2 class="h5 fw-bold text-dark m-0">Recent Transactions</h2>
+  <div class="card border rounded shadow-sm animate-up h-100">
+    <div class="card-header bg-white py-3 px-4">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="h4 fw-bold text-dark m-0">Recent Transactions</h2>
         <div class="d-flex align-items-center gap-3">
           <div class="search-box position-relative">
             <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"
@@ -135,29 +135,34 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let transaction of transactions()" class="border-0">
-              <td class="ps-4 py-2 text-secondary small border-0">
-                <span class="d-block text-dark fw-medium">{{ transaction.createdOn | date:'dd MMM yy' }}</span>
-                <span class="text-muted" style="font-size: 0.7rem;">{{ transaction.createdOn | date:'hh:mm a' }}</span>
-              </td>
-              <td class="py-2 border-0">
-                <span class="fw-bold text-dark">{{ transaction.holderName }}</span>
-              </td>
-              <td class="py-2 border-0">
-                <span class="text-dark small fw-medium">
-                  {{ transaction.type === 'SEND' ? 'Debited' : 'Credited' }}
-                </span>
-              </td>
-              <td class="py-2 fw-bold border-0 text-dark">
-                {{ transaction.type === 'SEND' ? '-' : '+' }} {{ transaction.amount | currency:'INR' }}
-              </td>
-              <td class="py-2 border-0">
-                <span class="fw-bold small"
-                  [ngClass]="transaction.status === 'SUCCESS' ? 'text-success' : 'text-danger'">
-                  {{ transaction.status === 'SUCCESS' ? 'Success' : 'Failed' }}
-                </span>
-              </td>
-            </tr>
+            @for (transaction of transactions(); track $index) {
+              <tr class="border-0">
+                <td class="ps-4 py-2 text-secondary small border-0">
+                  <span class="d-block text-dark fw-medium">{{ transaction.createdOn | date:'MMMM dd, yyyy' }}</span>
+                  <span class="text-muted" style="font-size: 0.7rem;">{{ transaction.createdOn | date:'hh:mm:ss a z' }}</span>
+                </td>
+                <td class="py-2 border-0">
+                  <span class="fw-bold text-dark">{{ transaction.holderName }}</span>
+                </td>
+                <td class="py-2 border-0">
+                  <span class="text-dark small fw-medium">
+                    {{ transaction.type === 'SEND' ? 'Debited' : 'Credited' }}
+                  </span>
+                  @if (transaction.status === 'SUCCESS' && transaction.type === 'SEND') {
+                    <span class="reward-points">+ {{ transaction.rewardPoints }} RP</span>
+                  }
+                </td>
+                <td class="py-2 fw-bold border-0 text-dark">
+                  {{ transaction.type === 'SEND' ? '-' : '+' }} {{ transaction.amount | currency:'INR' }}
+                </td>
+                <td class="py-2 border-0">
+                  <span class="fw-bold small"
+                    [ngClass]="transaction.status === 'SUCCESS' ? 'text-success' : 'text-danger'">
+                    {{ transaction.status === 'SUCCESS' ? 'Success' : 'Failed' }}
+                  </span>
+                </td>
+              </tr>
+            }
           </tbody>
         </table>
 
