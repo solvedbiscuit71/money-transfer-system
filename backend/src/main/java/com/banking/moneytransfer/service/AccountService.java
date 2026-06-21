@@ -38,6 +38,35 @@ public class AccountService {
     private PasswordEncoder passwordEncoder;
 
     /**
+     * Hot Fix: Currently using an in-memory sequence
+     */
+    private static int accountIdSequence = 1009;
+
+    private static String nextId() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("1000-1000-");
+        sb.append(accountIdSequence);
+        accountIdSequence += 1;
+        return sb.toString();
+    }
+
+    @Transactional
+    public AccountResponse createAccount(String holderName, String password) {
+        Account account =  Account.builder()
+                .id(nextId())
+                .holderName(holderName)
+                .passwordHash(passwordEncoder.encode(password))
+                .status(AccountStatus.ACTIVE)
+                .balance(BigDecimal.valueOf(5000))
+                .build();
+
+        account = accountRepository.saveAndFlush(account);
+        log.info("Successfully created an account for {}", holderName);
+
+        return mapToResponse(account);
+    }
+
+    /**
      * Get account by ID
      *
      * @param id Account ID

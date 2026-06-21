@@ -2,8 +2,11 @@ package com.banking.moneytransfer.controller;
 
 import com.banking.moneytransfer.dto.AccountBalanceResponse;
 import com.banking.moneytransfer.dto.AccountResponse;
+import com.banking.moneytransfer.dto.CreateAccountRequest;
 import com.banking.moneytransfer.dto.TransactionLogResponse;
 import com.banking.moneytransfer.service.AccountService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,18 @@ import java.util.List;
 public class AccountController {
 
     private final AccountService accountService;
+
+    /**
+     * 
+     * Create new account
+     * POST /api/v1/accounts/signup
+     */
+    @PostMapping("/signup")
+    public AccountResponse createAccount(@Valid @RequestBody CreateAccountRequest accountRequest) {
+        log.info("Received account creation request for {}", accountRequest.getHolderName());
+
+        return accountService.createAccount(accountRequest.getHolderName(), accountRequest.getPassword());
+    }
 
     /**
      * Get account details

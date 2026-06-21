@@ -17,7 +17,7 @@ export class LoginComponent {
     signupForm!: FormGroup;
     submitted = signal(false);
     isLoading = signal(false);
-    showLoginForm = signal(false);
+    showLoginForm = signal(true);
     errorMessage = signal("");
 
     constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) { }
